@@ -1,0 +1,86 @@
+name: Build Cross-Platform Releases (v2)
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+            name: linux-x64
+            artifact_name: IPTVTester-linux-x64
+            python_version: '3.10'
+          - os: macos-13
+            platform: macos
+            name: macos-x64
+            artifact_name: IPTVTester-macos-x64
+            python_version: '3.10'
+          - os: windows-latest
+            platform: windows
+            name: windows-x64
+            artifact_name: IPTVTester-win-x64
+            python_version: '3.10'
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python_version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Install system dependencies (Linux)
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-tk tk-dev
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pyinstaller
+
+      - name: Build with PyInstaller
+        shell: bash
+        run: |
+          pyinstaller build.spec --noconfirm
+          ls -la dist/
+
+      - name: Prepare artifact
+        shell: bash
+        run: |
+          mkdir -p package
+          if [ "${{ matrix.platform }}" = "linux" ]; then
+            cp dist/IPTVTester package/IPTVTester
+            chmod +x package/IPTVTester
+          elif [ "${{ matrix.platform }}" = "macos" ]; then
+            # macOS: 尝试打包成 .app，否则用单文件
+            if [ -d "dist/IPTVTester.app" ]; then
+              cp -r dist/IPTVTester.app package/
+            else
+              cp dist/IPTVTester package/IPTVTester
+              chmod +x package/IPTVTester
+            fi
+          else
+            cp dist/IPTVTester.exe package/IPTVTester.exe
+          fi
+          echo "Package contents:"
+          ls -la package/
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: package/
+          retention-days: 30
