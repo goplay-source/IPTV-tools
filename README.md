@@ -1,7 +1,7 @@
 <!-- SEO keywords: IPTV, M3U, M3U8, 免费IPTV, 免费直播源, CCTV直播, TVB海外, IPTV播放器, IPTV测试工具, free IPTV, IPTV playlist, live TV channels, IPTV checker, iptv-search.com, 频道搜索, 直播源测试, 测速, 归属地, 黑名单过滤, 周测试, 筛选M3U, IPTV channel directory, live stream testing -->
 
 <p align="center">
-  <img src=".github/social-preview.png" alt="IPTV Tools — Free IPTV Source Tester & M3U Sync" width="1280">
+  <img src="https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/.github/social-preview.png" alt="IPTV Tools — Free IPTV Source Tester & M3U Sync" width="1280">
 </p>
 
 # 📺 IPTV Tools
@@ -113,7 +113,6 @@ Pull requests welcome:
 - 🌐 **[iptv-search.com](https://iptv-search.com)** — companion online channel directory & live-stream search
 - 🔎 **[Browse: CCTV1](https://iptv-search.com/search?type=channel&q=CCTV1)** — jump to live results
 - 🔎 **[Browse: HBO](https://iptv-search.com/search?type=channel&q=HBO)** — jump to live results
-- 🤖 **[llms.txt](https://iptv-search.com/llms.txt)** — LLM-friendly channel summary
 - 🗺️ **[Sitemap](https://iptv-search.com/sitemap.xml)** — full page index
 
 ## 🙏 Acknowledgments
@@ -138,12 +137,10 @@ Built on the shoulders of giants:
 - 🔎 **Channel search** — find channels by name, country, language, or category with sub-200 ms responses
 - 🌍 **Live streaming** — browse and play live channels directly in the browser (no app install required)
 - 📱 **Mobile-friendly** — fully responsive, works in any modern browser on phone, tablet, or desktop
-- 🤖 **AI-optimized** — the site publishes an `llms.txt` file so LLMs and AI crawlers can understand the full channel index without scraping
 - 🗺️ **Coverage** — indexes thousands of live channels across 170+ country and regional groups
 - 🔄 **Auto-refresh** — the channel index is updated automatically every 6 hours via background crawlers
-- 📥 **API access** — public JSON endpoints for programmatic channel queries (see [llms.txt](https://iptv-search.com/llms.txt) for details)
 
-The weekly M3U published in this repo is independently tested and is **not derived from the iptv-search.com API** — it uses the built-in data source above.
+The weekly M3U published in this repo is independently tested by this project's own pipeline and is **not derived from any iptv-search.com endpoint** — it uses the built-in data source described above.
 
 ## 📜 License
 
@@ -256,7 +253,6 @@ IPTV-tools/
 - 🌐 **[iptv-search.com](https://iptv-search.com)** — 配套的在线频道目录与直播流搜索
 - 🔎 **[浏览: CCTV1](https://iptv-search.com/search?type=channel&q=CCTV1)** — 跳转落地页（带预填搜索词）
 - 🔎 **[浏览: HBO](https://iptv-search.com/search?type=channel&q=HBO)** — 跳转落地页（带预填搜索词）
-- 🤖 **[llms.txt](https://iptv-search.com/llms.txt)** — LLM 友好的频道摘要
 - 🗺️ **[站点地图](https://iptv-search.com/sitemap.xml)** — 完整页面索引
 
 ## 🙏 致谢
@@ -281,12 +277,10 @@ IPTV-tools/
 - 🔎 **频道搜索** — 按名称、国家、语言或类别搜索频道，200ms 内返回结果
 - 🌍 **在线直播** — 浏览器内直接浏览和播放直播频道，无需安装任何 App
 - 📱 **移动端适配** — 完全响应式设计，手机 / 平板 / 桌面端均可使用
-- 🤖 **AI 优化** — 站点发布 `llms.txt` 文件，LLM 和 AI 爬虫可直接理解完整频道索引，无需爬取
 - 🗺️ **覆盖范围** — 索引了数千个直播频道，覆盖 170+ 国家和地区分组
 - 🔄 **自动更新** — 频道索引每 6 小时自动刷新一次
-- 📥 **API 访问** — 提供公开 JSON 接口，支持程序化查询频道数据（详见 [llms.txt](https://iptv-search.com/llms.txt)）
 
-本仓库每周发布的 M3U 是独立测试的结果，**并非来自 iptv-search.com API**——它使用上面描述的内置数据源。
+本仓库每周发布的 M3U 是本项目自己的管道独立测试的结果，**不来自 iptv-search.com 的任何接口**——使用的是上面描述的内置数据源。
 
 ## 📜 许可证
 
