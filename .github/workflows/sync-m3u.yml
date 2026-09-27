@@ -1,0 +1,137 @@
+name: Sync Channel Catalog & Daily 20 Sample
+
+# 每 6 小时跑一次 + 手动可触发
+# 同步内容：
+#   1) catalog.json — 全部频道目录（name+group+logo，无 play_url）
+#   2) channel.m3u   — 每日 20 个真实可播频道（带当前 token，过期需重新拉取）
+#   3) stats.json    — 实时统计
+# 数据源：iptv-search.com /api/channels/catalog.json
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch catalog + daily sample
+        run: |
+          set -euo pipefail
+          # 端点定义：cfworker2/handlers/public.js#handleChannelsCatalog
+          #   - 路由：/api/channels/catalog.json
+          #   - 缓存：Cache-Control public, max-age=3600（1h，token 过期前重跑）
+          #   - 输出字段：
+          #       total_channels, total_groups, groups, channels[]  (目录, 无 URL)
+          #       daily_sample.date, daily_sample.count, daily_sample.channels[]  (20 个真实可播)
+          curl -fsSL --retry 3 --max-time 60 \
+            "https://iptv-search.com/api/channels/catalog.json" \
+            -o catalog.json
+
+      - name: Validate (no leak)
+        run: |
+          set -euo pipefail
+          if [ ! -s catalog.json ]; then
+            echo "catalog.json is empty — abort"
+            exit 1
+          fi
+          python3 -c "
+import json, sys
+data = json.load(open('catalog.json'))
+assert data.get('success') is True, 'success flag missing'
+
+groups = data.get('groups', [])
+channels = data.get('channels', [])
+sample = (data.get('daily_sample') or {}).get('channels', [])
+
+if not groups or not channels:
+    print('catalog missing groups/channels')
+    sys.exit(1)
+if not sample or len(sample) < 1:
+    print('daily_sample missing or empty')
+    sys.exit(1)
+
+# 硬安全检查：channels[] 数组里禁止泄露 URL/headers
+forbidden_meta = {'play_url', 'playUrl', 'playurl', 'headers', 'url'}
+for ch in channels[:5]:
+    leak = forbidden_meta & set(ch.keys())
+    if leak:
+        print(f'FATAL: catalog.channels[] contains forbidden fields {leak}')
+        sys.exit(1)
+
+# daily_sample 里的 play_url 必须是 /live/ 开头（带 token 的合法链接）
+for s in sample[:3]:
+    pu = s.get('play_url') or ''
+    if not pu.startswith('https://iptv-search.com/live/'):
+        print(f'FATAL: daily_sample play_url looks invalid: {pu[:80]}')
+        sys.exit(1)
+
+print(f'OK: {len(groups)} groups, {len(channels)} channels (meta only), {len(sample)} daily sample (playable)')
+"
+
+      - name: Render channel.m3u (real playable, daily 20)
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, datetime
+          data = json.load(open('catalog.json'))
+          assert data.get('success') is True, 'success flag missing'
+          groups = data.get('groups', [])
+          channels = data.get('channels', [])
+          sample = (data.get('daily_sample') or {}).get('channels', [])
+
+          # 频道目录 → catalog.json（已经是干净的）
+          # （保留原始结构，不再过滤）
+
+          # 每日 20 个真实可播 → channel.m3u
+          lines = ['#EXTM3U']
+          lines.append(f'# Generated at {datetime.datetime.utcnow().isoformat()}Z')
+          lines.append(f'# Daily sample date (UTC): {data.get("daily_sample", {}).get("date", "?")}')
+          lines.append(f'# Catalog total: {len(channels)} channels / {len(groups)} groups')
+          lines.append(f'# This file contains {len(sample)} REAL playable channels (24h valid, refresh daily).')
+          lines.append('# For full 8,700+ channel M3U, subscribe at https://iptv-search.com/?ref=github')
+
+          rendered = 0
+          for ch in sample:
+              name = (ch.get('name') or '').replace(',', '')
+              logo = ch.get('logo', '')
+              group = ch.get('group', '')
+              play_url = ch.get('play_url')
+              if not play_url:
+                  continue
+              attrs = f'-1 tvg-logo="{logo}" group-title="{group}"' if logo else f'-1 group-title="{group}"'
+              lines.append(f'#EXTINF:{attrs},{name}')
+              lines.append(play_url)
+              rendered += 1
+
+          open('channel.m3u', 'w', encoding='utf-8').write('\n'.join(lines) + '\n')
+
+          # stats.json 用于 README badges
+          stats = {
+              'total_channels': len(channels),
+              'total_groups': len(groups),
+              'daily_sample_count': rendered,
+              'generated_at': datetime.datetime.utcnow().isoformat() + 'Z'
+          }
+          open('stats.json', 'w', encoding='utf-8').write(json.dumps(stats, ensure_ascii=False))
+          print(f'Rendered {rendered} playable channels to channel.m3u')
+          PY
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add catalog.json channel.m3u stats.json
+          git diff --staged --quiet || \
+            git commit -m "chore: sync catalog + daily 20 sample ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+          git push
