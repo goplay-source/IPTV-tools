@@ -35,6 +35,10 @@ jobs:
         run: |
           pip install requests fake-useragent
 
+      - name: Show ip2region status
+        run: |
+          python -c "from test_logic import init_xdb; s = init_xdb(); print('ip2region searcher:', type(s).__name__ if s else 'FAILED')"
+
       - name: Run weekly test
         run: python test_weekly.py
 
