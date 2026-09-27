@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <!-- Background: deep space gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="50%" stop-color="#161b22"/>
+      <stop offset="100%" stop-color="#1f3a5f"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="50%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.06" stroke="#58a6ff" stroke-width="1">
+    <line x1="0" y1="160" x2="1280" y2="160"/>
+    <line x1="0" y1="320" x2="1280" y2="320"/>
+    <line x1="0" y1="480" x2="1280" y2="480"/>
+    <line x1="320" y1="0" x2="320" y2="640"/>
+    <line x1="640" y1="0" x2="640" y2="640"/>
+    <line x1="960" y1="0" x2="960" y2="640"/>
+  </g>
+
+  <!-- Top-left: satellite emoji + brand -->
+  <text x="80" y="160" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="84" font-weight="800" fill="#f0f6fc">
+    🛰️ IPTV Tools
+  </text>
+
+  <!-- Tagline -->
+  <text x="80" y="240" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="32" font-weight="500" fill="#8b949e">
+    Free IPTV Source Tester + M3U Sync
+  </text>
+
+  <!-- Accent bar separator -->
+  <rect x="80" y="280" width="220" height="6" fill="url(#bar)" rx="3"/>
+
+  <!-- Key stats row -->
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif">
+    <!-- Stat 1: Channels -->
+    <text x="80" y="380" font-size="56" font-weight="800" fill="#f97316">8000+</text>
+    <text x="80" y="410" font-size="20" font-weight="500" fill="#8b949e">channels indexed</text>
+
+    <!-- Stat 2: Groups -->
+    <text x="380" y="380" font-size="56" font-weight="800" fill="#ec4899">177</text>
+    <text x="380" y="410" font-size="20" font-weight="500" fill="#8b949e">country groups</text>
+
+    <!-- Stat 3: Daily playable -->
+    <text x="580" y="380" font-size="56" font-weight="800" fill="#fbbf24">20</text>
+    <text x="580" y="410" font-size="20" font-weight="500" fill="#8b949e">playable / day</text>
+
+    <!-- Stat 4: Sync -->
+    <text x="780" y="380" font-size="56" font-weight="800" fill="#8b5cf6">6h</text>
+    <text x="780" y="410" font-size="20" font-weight="500" fill="#8b949e">auto-sync cycle</text>
+  </g>
+
+  <!-- Bottom row: badges -->
+  <g transform="translate(80, 520)">
+    <!-- Python badge -->
+    <rect x="0" y="0" width="160" height="48" rx="24" fill="#1f6feb"/>
+    <text x="80" y="32" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="18" font-weight="600" fill="#ffffff" text-anchor="middle">
+      🐍 Python 3.10+
+    </text>
+
+    <!-- Cross-platform badge -->
+    <rect x="180" y="0" width="280" height="48" rx="24" fill="#21262d" stroke="#30363d"/>
+    <text x="320" y="32" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="18" font-weight="600" fill="#c9d1d9" text-anchor="middle">
+      💻 Win / macOS / Linux
+    </text>
+
+    <!-- MIT badge -->
+    <rect x="480" y="0" width="100" height="48" rx="24" fill="#21262d" stroke="#30363d"/>
+    <text x="530" y="32" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="18" font-weight="600" fill="#c9d1d9" text-anchor="middle">
+      📜 MIT
+    </text>
+  </g>
+
+  <!-- Right side: TV/wave decoration -->
+  <g transform="translate(950, 140)" opacity="0.85">
+    <!-- TV screen -->
+    <rect x="0" y="0" width="240" height="160" rx="12" fill="#0d1117" stroke="#f97316" stroke-width="3"/>
+    <!-- TV antenna lines -->
+    <line x1="20" y1="20" x2="60" y2="60" stroke="#fbbf24" stroke-width="2" opacity="0.6"/>
+    <line x1="220" y1="20" x2="180" y2="60" stroke="#fbbf24" stroke-width="2" opacity="0.6"/>
+    <!-- TV content placeholder -->
+    <text x="120" y="95" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="36" font-weight="800" fill="#f97316" text-anchor="middle">📺</text>
+    <text x="120" y="130" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="600" fill="#8b949e" text-anchor="middle">LIVE</text>
+    <!-- TV stand -->
+    <rect x="100" y="160" width="40" height="20" fill="#1f3a5f"/>
+    <rect x="60" y="180" width="120" height="8" rx="4" fill="#1f3a5f"/>
+  </g>
+
+  <!-- Bottom-right URL -->
+  <text x="1200" y="600" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="18" font-weight="500" fill="#58a6ff" text-anchor="end">
+    github.com/goplay-source/IPTV-tools
+  </text>
+</svg>

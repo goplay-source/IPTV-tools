@@ -1,0 +1,60 @@
+name: Weekly M3U Test & Publish
+
+# 每周测试一次内置 M3U 数据源，全量输出到 channel.m3u（可播在前，失效在后，按分组排列）
+# 数据源：Guovin/iptv-api (cdn.jsdelivr.net, @gd 分支, 公开镜像)
+# 测试工具：本仓库的 test_logic.py（与桌面 GUI 同一套检测逻辑）
+# 产出：
+#   - channel.m3u       全量 M3U 订阅（可播频道排前，失效排后，按 group 分组）
+#   - test_report.json  统计报告（频道总数、可播数、各组数量）
+on:
+  schedule:
+    # 每周一 06:00 UTC（北京时间 14:00）
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install requests fake-useragent
+
+      - name: Run weekly test
+        run: python test_weekly.py
+
+      - name: Validate output
+        run: |
+          set -euo pipefail
+          test -s channel.m3u || { echo "channel.m3u is empty — abort"; exit 1; }
+          lines=$(wc -l < channel.m3u)
+          echo "channel.m3u: $lines lines"
+          # 确保没有空 URL 行
+          grep -v '^#' channel.m3u | grep -cv '^http' || true
+          test -s test_report.json || echo "WARN: test_report.json missing"
+          cat test_report.json | head -50
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add channel.m3u test_report.json
+          git diff --staged --quiet || \
+            git commit -m "chore: weekly test — refresh channel.m3u ($(date -u +'%Y-%m-%d'))"
+          git push
