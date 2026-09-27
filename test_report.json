@@ -1,0 +1,171 @@
+{
+  "generated_at": "2026-09-27T14:19:02.935237",
+  "source": "https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u",
+  "stats": {
+    "total": 1559,
+    "playable": 245,
+    "dead": 1314
+  },
+  "groups": {
+    "📡卫视频道": {
+      "total": 144,
+      "playable": 60
+    },
+    "📺央视频道": {
+      "total": 85,
+      "playable": 39
+    },
+    "☘️四川频道": {
+      "total": 48,
+      "playable": 16
+    },
+    "☘️安徽频道": {
+      "total": 39,
+      "playable": 16
+    },
+    "☘️江苏频道": {
+      "total": 102,
+      "playable": 15
+    },
+    "☘️河北频道": {
+      "total": 52,
+      "playable": 15
+    },
+    "🌊港·澳·台": {
+      "total": 54,
+      "playable": 12
+    },
+    "☘️浙江频道": {
+      "total": 184,
+      "playable": 10
+    },
+    "☘️福建频道": {
+      "total": 39,
+      "playable": 10
+    },
+    "☘️广东频道": {
+      "total": 52,
+      "playable": 9
+    },
+    "🏀体育频道": {
+      "total": 73,
+      "playable": 6
+    },
+    "☘️广西频道": {
+      "total": 23,
+      "playable": 5
+    },
+    "☘️湖北频道": {
+      "total": 42,
+      "playable": 4
+    },
+    "☘️上海频道": {
+      "total": 50,
+      "playable": 3
+    },
+    "☘️山西频道": {
+      "total": 7,
+      "playable": 3
+    },
+    "☘️新疆频道": {
+      "total": 10,
+      "playable": 3
+    },
+    "☘️湖南频道": {
+      "total": 35,
+      "playable": 3
+    },
+    "☘️青海频道": {
+      "total": 15,
+      "playable": 3
+    },
+    "☘️黑龙江频道": {
+      "total": 37,
+      "playable": 3
+    },
+    "☘️云南频道": {
+      "total": 8,
+      "playable": 2
+    },
+    "☘️吉林频道": {
+      "total": 5,
+      "playable": 2
+    },
+    "☘️山东频道": {
+      "total": 20,
+      "playable": 1
+    },
+    "☘️河南频道": {
+      "total": 122,
+      "playable": 1
+    },
+    "☘️海南频道": {
+      "total": 25,
+      "playable": 1
+    },
+    "☘️辽宁频道": {
+      "total": 7,
+      "playable": 1
+    },
+    "☘️重庆频道": {
+      "total": 4,
+      "playable": 1
+    },
+    "☘️陕西频道": {
+      "total": 16,
+      "playable": 1
+    },
+    "☘️内蒙古频道": {
+      "total": 6,
+      "playable": 0
+    },
+    "☘️北京频道": {
+      "total": 19,
+      "playable": 0
+    },
+    "☘️天津频道": {
+      "total": 6,
+      "playable": 0
+    },
+    "☘️宁夏频道": {
+      "total": 1,
+      "playable": 0
+    },
+    "☘️甘肃频道": {
+      "total": 14,
+      "playable": 0
+    },
+    "☘️贵州频道": {
+      "total": 1,
+      "playable": 0
+    },
+    "🎬电影频道": {
+      "total": 64,
+      "playable": 0
+    },
+    "🎮游戏频道": {
+      "total": 3,
+      "playable": 0
+    },
+    "🎵音乐频道": {
+      "total": 14,
+      "playable": 0
+    },
+    "🏛经典剧场": {
+      "total": 30,
+      "playable": 0
+    },
+    "💰央视付费频道": {
+      "total": 46,
+      "playable": 0
+    },
+    "🕘️更新时间": {
+      "total": 1,
+      "playable": 0
+    },
+    "🪁动画频道": {
+      "total": 56,
+      "playable": 0
+    }
+  }
+}
