@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-27T15:37:56.633318",
+  "generated_at": "2026-09-27T20:02:11.807306",
   "source": "https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u",
   "stats": {
     "total": 1558,
-    "playable": 237,
-    "dead": 1321
+    "playable": 241,
+    "dead": 1317
   },
   "groups": {
     "📡卫视频道": {
@@ -19,13 +19,13 @@
       "total": 47,
       "playable": 17
     },
+    "☘️安徽频道": {
+      "total": 39,
+      "playable": 16
+    },
     "☘️河北频道": {
       "total": 52,
       "playable": 15
-    },
-    "☘️安徽频道": {
-      "total": 39,
-      "playable": 12
     },
     "☘️江苏频道": {
       "total": 102,
