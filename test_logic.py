@@ -102,21 +102,23 @@ class Channel:
 # ── 全局状态 ─────────────────────────────────────────────────────────────────
 _xdb_lock = threading.Lock()
 _xdb_initialized = False
+_xdb_searcher = None
 
 
 def init_xdb():
-    """初始化 ip2region 数据库（线程安全）"""
-    global _xdb_initialized
+    """初始化 ip2region 数据库（线程安全），返回 searcher 实例"""
+    global _xdb_initialized, _xdb_searcher
     if _xdb_initialized or load_xdb_file is None:
-        return
+        return _xdb_searcher
     with _xdb_lock:
         if _xdb_initialized:
-            return
+            return _xdb_searcher
         try:
-            load_xdb_file()
+            _xdb_searcher = load_xdb_file()
             _xdb_initialized = True
         except Exception as e:
             print(f"⚠️ XDB 初始化失败: {e}")
+    return _xdb_searcher
 
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -1313,8 +1315,8 @@ def process_channel_data(name, link_str, group_name, domain_blacklist, iptest_in
     channel_extinf_headers = link_info.get('extinf_headers', {})
 
     try:
-        guishudi = iptest_instance.searchWithContent(final_url if final_url else original_url)
-    except:
+        guishudi = searchWithContent(final_url if final_url else original_url)
+    except Exception:
         guishudi = "未知"
 
     hk_keywords = ['港·澳·台', '中国港澳', 'HK', 'TW', '港', '澳', '湾', '全球', '體育', '加密', '国际体育', '港澳台','國會','戲劇','旅遊','運動','新聞','兒童','音樂','綜合','香港','Pdtv','特闽','特区','闽南','SXtv','Hktv','FYtv','Juli','NOW','风云','8528','mytv','央視','體育','綜合']

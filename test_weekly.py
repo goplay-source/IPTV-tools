@@ -36,6 +36,7 @@ log = logging.getLogger('weekly')
 # ── constants ─────────────────────────────────────────────────────────────────
 BUILT_IN_SOURCE = "https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u"
 OUTPUT_FILE = "channel.m3u"
+# ip2region xdb ships with the repo checkout (ip2region_master/data/ip2region.xdb)
 MAX_WORKERS = 8          # 8 threads is safe for a GitHub Actions runner
 TIMEOUT = 20             # seconds per link test
 MIN_FLUENCY = 10         # same default as GUI
