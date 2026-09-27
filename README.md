@@ -13,7 +13,7 @@
 
 </div>
 
-> 🛰️ A local desktop tool for batch-testing IPTV / M3U8 live stream sources, plus an auto-synced global channel catalog updated every 6 hours from [iptv-search.com](https://iptv-search.com/?ref=github).
+> 🛰️ A local desktop tool for batch-testing IPTV / M3U8 live stream sources, with an auto-synced global channel catalog updated every 6 hours.
 
 ## ✨ Features
 
@@ -41,27 +41,11 @@ Windows users can also download the pre-built `.exe` from [Releases](https://git
 
 ## 📥 Auto-Synced Channel Catalog
 
-This repo auto-syncs the latest channel catalog from [iptv-search.com](https://iptv-search.com/?ref=github) every 6 hours:
+This repo auto-syncs the latest channel catalog from [iptv-search.com](https://iptv-search.com) every 6 hours:
 
 - **[channel.m3u](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/channel.m3u)** — **20 real playable channels per day** (refreshed daily, full M3U format you can import into VLC / TVBox / Kodi)
 - **[catalog.json](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/catalog.json)** — full channel metadata tree (16,000+ channels, 170+ groups)
 - **[stats.json](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/stats.json)** — live statistics
-
-> ⚠️ **Note**: This repo syncs the public catalog only (channel names + groups + logos). The daily `channel.m3u` includes **20 real playable URLs** as a free preview; the full 16,000+ channel M3U requires a subscription at [iptv-search.com](https://iptv-search.com/?ref=github).
-
-## 🆓 Open Source vs Online Service
-
-| Feature | Desktop Tool (this repo) | [iptv-search.com](https://iptv-search.com/?ref=github) Online |
-|---------|--------------------------|------------------------|
-| Local source batch testing | ✅ | ✅ |
-| Fluency scoring | ✅ | ✅ |
-| Geo lookup | ✅ | ✅ |
-| Channel catalog (metadata) | ✅ | ✅ |
-| Daily playable channels | 20 (free preview) | 16,000+ (full) |
-| M3U subscription (auto-updated) | — | ✅ |
-| Multi-device sync | — | ✅ |
-| EPG program guide | — | ✅ |
-| Price | Free | See [plans page](https://iptv-search.com/plans/?ref=github) |
 
 ## 🛠️ Usage
 
@@ -120,17 +104,16 @@ Pull requests welcome:
 
 ## 📚 Related Resources
 
-- 🌐 **[iptv-search.com](https://iptv-search.com/?ref=github)** — Full online channel directory (16,000+ channels)
+- 🌐 **[iptv-search.com](https://iptv-search.com)** — Companion online channel directory
 - 📺 **[Channel Showcase](https://iptv-search.com/showcase)** — Browse all channels with search
-- 🤖 **[llms.txt](https://iptv-search.com/llms.txt)** — LLM-friendly channel summary (indexable by GPT / Claude)
+- 🤖 **[llms.txt](https://iptv-search.com/llms.txt)** — LLM-friendly channel summary
 - 🗺️ **[Sitemap](https://iptv-search.com/sitemap.xml)** — Full page index
-- 💎 **[Subscription Plans](https://iptv-search.com/plans/?ref=github)** — Full M3U subscription pricing
 
 ## 🙏 Acknowledgments
 
 - [ip2region](https://github.com/lionsoul2014/ip2region) — IP geo library
 - [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter) — Modern tkinter theme
-- [iptv-search.com](https://iptv-search.com/?ref=github) — Real-time global channel catalog
+- [iptv-search.com](https://iptv-search.com) — Channel catalog source
 
 ## 📜 License
 
@@ -138,6 +121,6 @@ MIT
 
 ---
 
-🌐 **Maintained by [iptv-search.com](https://iptv-search.com/?ref=github)**
+🌐 **Maintained by [iptv-search.com](https://iptv-search.com)**
 
 If this tool helped you, please ⭐ this repo!
