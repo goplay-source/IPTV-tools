@@ -18,7 +18,7 @@
 
 </div>
 
-> 🛰️ A local desktop tool for batch-testing IPTV / M3U8 live stream sources, with a built-in public M3U source tested weekly — all channels are published to the subscription file, playable ones first.
+> 🛰️ A local desktop tool for batch-testing IPTV / M3U8 live stream sources, with a built-in public M3U source tested weekly — only playable channels are published to the subscription file, grouped by category.
 
 ## ✨ Features
 
@@ -30,7 +30,7 @@
 | ⚡ **Fluency Scoring** | 3-second speed test, 0-100 score with quality rating |
 | 🌍 **Geo Lookup** | Offline ip2region database, no network required |
 | 🚫 **Blacklist Filtering** | Domain + keyword dual-layer auto-filter |
-| 🔄 **Weekly M3U Test** | GitHub Action tests the built-in data source weekly, publishes full M3U (playable-first) |
+| 🔄 **Weekly M3U Test** | GitHub Action tests the built-in data source weekly, publishes playable-only M3U |
 | 📦 **One-Click Build** | PyInstaller single-file .exe, no Python needed |
 
 ## 🚀 Quick Start
@@ -46,10 +46,10 @@ Windows users can also download the pre-built `.exe` from [Releases](https://git
 
 ## 📥 Weekly M3U
 
-This repo runs a weekly automated test against a built-in public M3U source using the same detection logic as the desktop app (`test_logic.py`). All channels are published to the subscription file — playable ones come first in each group so players pick good links, and the rest follow for reference:
+This repo runs a weekly automated test against a built-in public M3U source using the same detection logic as the desktop app (`test_logic.py`). Only channels that pass testing are written to the subscription file, each tagged with `location` and `fluency` attributes in the `#EXTINF` line:
 
-- **[channel.m3u](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/channel.m3u)** — full M3U subscription, tested weekly, playable-first ordering, grouped by category
-- **[test_report.json](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/test_report.json)** — JSON statistics report (total channels, playable count, per-group counts)
+- **[channel.m3u](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/channel.m3u)** — playable-only M3U, refreshed weekly, up to 2 links per channel, grouped by category
+- **[test_report.json](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/test_report.json)** — JSON statistics report (channels tested, playable count, per-group counts)
 
 Import `channel.m3u` into VLC / TVBox / Kodi and you're done.
 
@@ -92,7 +92,7 @@ IPTV-tools/
 ├── gui.py                # CTk three-tab interface
 ├── test_logic.py         # Core detection logic layer
 ├── test_weekly.py        # Weekly M3U test pipeline
-├── channel.m3u           # Weekly tested M3U (full, playable-first)
+├── channel.m3u           # Weekly tested M3U (playable-only)
 ├── test_report.json      # Weekly test report (auto-published)
 ├── requirements.txt      # Python dependencies
 ├── build.spec            # PyInstaller config
@@ -158,7 +158,7 @@ If this tool helped you, please ⭐ this repo!
 
 ## 🛰️ 免费 IPTV 直播源测试工具 & 每周 M3U 订阅
 
-一款本地桌面应用，用于批量检测 IPTV / M3U8 直播源的有效性、流畅度和归属地，并附带每周自动测试一次的内置公开数据源，全量输出到订阅文件（可播频道排前）。
+一款本地桌面应用，用于批量检测 IPTV / M3U8 直播源的有效性、流畅度和归属地，并附带每周自动测试一次的内置公开数据源，只将测试通过的可播频道输出到订阅文件。
 
 ## ✨ 功能特性
 
@@ -170,7 +170,7 @@ If this tool helped you, please ⭐ this repo!
 | ⚡ **流畅度评分** | 3 秒测速，0-100 分 + 优秀/良好/一般/较差评级 |
 | 🌍 **归属地查询** | 离线 ip2region 数据库，无需联网 |
 | 🚫 **黑名单过滤** | 域名 + 关键词双层自动过滤 |
-| 🔄 **每周 M3U 测试** | GitHub Action 每周测试一次内置数据源，发布全量 M3U（可播优先排序） |
+| 🔄 **每周 M3U 测试** | GitHub Action 每周测试一次内置数据源，发布可播频道 M3U |
 | 📦 **一键打包** | PyInstaller 单文件 exe，免装 Python |
 
 ## 🚀 快速开始
@@ -186,10 +186,10 @@ Windows 用户也可以下载 [Releases](https://github.com/goplay-source/IPTV-t
 
 ## 📥 每周 M3U
 
-本仓库每周自动对一份内置的公开 M3U 数据源执行一次测试（使用与桌面端相同的 `test_logic.py` 检测逻辑）。订阅文件保留全部频道——可播频道排在每组靠前位置方便播放器优先取到好线路，未通过测试的频道列在后面仅供参考：
+本仓库每周自动对一份内置的公开 M3U 数据源执行一次测试（使用与桌面端相同的 `test_logic.py` 检测逻辑）。订阅文件只保留通过测试的可播频道，每条 `#EXTINF` 行带 `location`（归属地）和 `fluency`（流畅度）属性：
 
-- **[channel.m3u](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/channel.m3u)** — 全量 M3U 订阅，每周测试更新，可播优先排序，按类别分组
-- **[test_report.json](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/test_report.json)** — 统计报告（总频道数、可播数、各组数量）
+- **[channel.m3u](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/channel.m3u)** — 可播 M3U 订阅，每周测试更新，每频道最多 2 条链接，按类别分组
+- **[test_report.json](https://raw.githubusercontent.com/goplay-source/IPTV-tools/main/test_report.json)** — 统计报告（测试总数、可播数、各组数量）
 
 将 `channel.m3u` 导入 VLC / TVBox / Kodi 即可直接使用。
 
@@ -232,7 +232,7 @@ IPTV-tools/
 ├── gui.py                # CustomTkinter 三 Tab 界面
 ├── test_logic.py         # 核心检测逻辑层
 ├── test_weekly.py        # 每周 M3U 测试管道
-├── channel.m3u           # 每周测试后的 M3U（全量，可播优先）
+├── channel.m3u           # 每周测试后的 M3U（仅可播频道）
 ├── test_report.json      # 每周测试报告（自动发布）
 ├── requirements.txt      # Python 依赖
 ├── build.spec            # PyInstaller 配置

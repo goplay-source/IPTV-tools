@@ -3,8 +3,8 @@ Weekly M3U test pipeline:
   1. Fetch built-in source: https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u
   2. Parse all channels with test_logic.parse_source
   3. Run batch tests via ThreadPoolExecutor + test_channel_via_config
-  4. Output all channels (regardless of test result), grouped, with playable-first ordering
-  5. Write full M3U → channel.m3u + stats → test_report.json
+  4. Output only playable channels, grouped, location/fluency embedded in #EXTINF
+  5. Write M3U → channel.m3u + stats → test_report.json
 """
 
 import sys
@@ -99,16 +99,13 @@ def run_tests(channels, test_config) -> list:
 
 def dedup_and_group(channels: list) -> OrderedDict:
     """
-    Output ALL channels grouped by group title.
-    Playable channels come first within each group; dead ones follow.
-    Max 2 links per (name, group) for playable; dead channels keep all original links.
+    Output only PLAYABLE channels, grouped by group title.
+    Max MAX_URLS_PER_CHANNEL links per (name, group).
     Returns OrderedDict[group_name, list[Channel]].
     """
-    # Split into playable / not-playable, keeping per-channel counts
     playable = [c for c in channels if c.is_valid]
-    dead = [c for c in channels if not c.is_valid]
 
-    # Playable: dedup by (name, group), keep at most MAX_URLS_PER_CHANNEL
+    # Dedup by (name_lower, group): keep at most MAX_URLS_PER_CHANNEL
     seen = {}  # key: (name_lower, group) → count kept
     playable_kept = []
     for ch in playable:
@@ -119,47 +116,48 @@ def dedup_and_group(channels: list) -> OrderedDict:
             playable_kept.append(ch)
         # else: already at cap, skip the extra duplicate link
 
-    # Dead: keep all, grouped
+    # Group by group title
     all_channels_grouped = OrderedDict()
-
     for ch in playable_kept:
         all_channels_grouped.setdefault(ch.group_name, []).append(ch)
 
-    for ch in dead:
-        all_channels_grouped.setdefault(ch.group_name, []).append(ch)
-
     # Sort groups: playable count desc, then name
-    group_stats = {g: (sum(1 for c in lst if c.is_valid), len(lst)) for g, lst in all_channels_grouped.items()}
-    ordered = OrderedDict()
-    for g, lst in sorted(all_channels_grouped.items(),
-                        key=lambda kv: (-group_stats[kv[0]][0], kv[0].lower())):
-        # Within group: playable first, then dead, both in original relative order
-        group_playable = [c for c in lst if c.is_valid]
-        group_dead = [c for c in lst if not c.is_valid]
-        ordered[g] = group_playable + group_dead
+    ordered = OrderedDict(
+        sorted(all_channels_grouped.items(),
+               key=lambda kv: (-len(kv[1]), kv[0].lower()))
+    )
     return ordered
 
 
 def write_m3u(groups: OrderedDict, out_path: str, source: str, stats: dict):
-    """Write the full M3U file (all channels, playable-first ordering)."""
+    """Write playable-only M3U; location/fluency embedded as #EXTINF attributes."""
     total = sum(len(v) for v in groups.values())
     lines = [
         '#EXTM3U',
         f'# Generated: {datetime.now().strftime("%Y-%m-%d %H:%M UTC")}',
         f'# Source: {source}',
-        f'# Channels: {total} total — {stats["playable"]} playable, {total - stats["playable"]} unverified',
-        f'# Playable channels are listed first within each group',
+        f'# Channels: {total} playable',
         f'# Groups: {len(groups)}',
     ]
     for group, chs in groups.items():
         for ch in chs:
             raw = ch.raw_extinf_line or f'#EXTINF:-1 group-title="{group}",{ch.name}'
             cleaned = strip_tvg_meta(raw)
+            # append location + fluency attributes to the #EXTINF line
+            attrs = []
+            if ch.location and ch.location != "未测试":
+                attrs.append(f'location="{ch.location}"')
+            if ch.fluency_level:
+                attrs.append(f'fluency="{ch.fluency_level}"')
+            if attrs:
+                # insert before the channel name (after last ",")
+                last_comma = cleaned.rfind(',')
+                cleaned = cleaned[:last_comma] + ' ' + ' '.join(attrs) + cleaned[last_comma:]
             lines.append(cleaned)
             lines.append(ch.link_str)
     with open(out_path, 'w', encoding='utf-8', newline='\n') as f:
         f.write('\n'.join(lines) + '\n')
-    log.info("Wrote %d channels across %d groups → %s", total, len(groups), out_path)
+    log.info("Wrote %d playable channels across %d groups → %s", total, len(groups), out_path)
 
 
 def _build_config():
@@ -198,16 +196,16 @@ def main():
     # ── 3. test all ──────────────────────────────────────────────────────────
     results = run_tests(channels, config)
 
-    # ── 4. dedup & group (output ALL, playable-first) ───────────────────────
+    # ── 4. dedup & group (playable only) ─────────────────────────────────────
     groups = dedup_and_group(results)
 
     total = sum(len(v) for v in groups.values())
-    playable = sum(1 for g in groups.values() for c in g if c.is_valid)
+    tested_total = len(results)
 
     stats = {
-        'total': total,
-        'playable': playable,
-        'dead': total - playable,
+        'tested': tested_total,
+        'playable': total,
+        'unplayable': tested_total - total,
     }
 
     # ── 5. write M3U ─────────────────────────────────────────────────────────
@@ -218,7 +216,7 @@ def main():
         'generated_at': datetime.now().isoformat(),
         'source': BUILT_IN_SOURCE,
         'stats': stats,
-        'groups': {g: {'total': len(chs), 'playable': sum(1 for c in chs if c.is_valid)}
+        'groups': {g: {'count': len(chs)}
                    for g, chs in groups.items()},
     }
     with open('test_report.json', 'w', encoding='utf-8') as f:

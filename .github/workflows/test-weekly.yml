@@ -1,11 +1,11 @@
 name: Weekly M3U Test & Publish
 
-# 每周测试一次内置 M3U 数据源，全量输出到 channel.m3u（可播在前，失效在后，按分组排列）
+# 每周测试一次内置 M3U 数据源，只输出可播频道到 channel.m3u（按分组排列）
 # 数据源：Guovin/iptv-api (cdn.jsdelivr.net, @gd 分支, 公开镜像)
 # 测试工具：本仓库的 test_logic.py（与桌面 GUI 同一套检测逻辑）
 # 产出：
-#   - channel.m3u       全量 M3U 订阅（可播频道排前，失效排后，按 group 分组）
-#   - test_report.json  统计报告（频道总数、可播数、各组数量）
+#   - channel.m3u       可播 M3U 订阅（每频道最多 2 条链接，#EXTINF 行带 location/fluency 属性）
+#   - test_report.json  统计报告（测试总数、可播数、分组统计）
 on:
   schedule:
     # 每周一 06:00 UTC（北京时间 14:00）
