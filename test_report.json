@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-11-02T15:35:16.185169",
+  "generated_at": "2026-11-09T16:03:57.140374",
   "source": "https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/output/result.m3u",
   "stats": {
     "tested": 1619,
-    "playable": 230,
-    "unplayable": 1389
+    "playable": 224,
+    "unplayable": 1395
   },
   "groups": {
     "📡卫视频道": {
@@ -14,25 +14,25 @@
       "count": 36
     },
     "☘️四川频道": {
-      "count": 16
-    },
-    "☘️河北频道": {
-      "count": 15
+      "count": 17
     },
     "☘️江苏频道": {
-      "count": 14
+      "count": 13
     },
-    "☘️安徽频道": {
-      "count": 11
+    "☘️河北频道": {
+      "count": 13
     },
     "🌊港·澳·台": {
       "count": 10
     },
-    "☘️广东频道": {
-      "count": 9
-    },
     "☘️浙江频道": {
       "count": 9
+    },
+    "☘️安徽频道": {
+      "count": 8
+    },
+    "☘️广东频道": {
+      "count": 8
     },
     "☘️福建频道": {
       "count": 8
